@@ -46,7 +46,7 @@ repositories:
 
   motion_primitives:
     type: git
-    url: git@github.com:ljarin/motion_primitives.git
+    url: git@github.com:shaoyifei96/motion_primitives.git
     version: master
 
   gcopter:
