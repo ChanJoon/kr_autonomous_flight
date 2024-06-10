@@ -297,7 +297,7 @@ kr_planning_msgs::SplineTrajectory SplineTrajfromDiscreteTwoPoints(
   kr_planning_msgs::Spline spline;
   for (int dim = 0; dim < 3; dim++) {
     traj_msg.data.push_back(spline);
-    traj_msg.data[dim].t_total = traj_dis_msg.dt * (traj_dis_msg.N - 1);
+    traj_msg.data[dim].t_total = traj_dis_msg.dt * (traj_dis_msg.N_ctrl - 1);
   }
   // calc coeff
   for (int traj_idx = 0; traj_idx < traj_dis_msg.pos.size() - 1; traj_idx++) {
@@ -364,7 +364,7 @@ SplineTrajfromDiscrete(  // this method will make beginning and end have an
   {
     traj_msg.data.push_back(spline);
     //@yuwei
-    traj_msg.data[dim].t_total =  (traj_dis_msg.N -1) * traj_dis_msg.dt;
+    traj_msg.data[dim].t_total =  (traj_dis_msg.N_ctrl -1) * traj_dis_msg.dt;
   }
   // ROS_INFO("Time matrix is %f", time_mat);
   for (int traj_idx = 0;
@@ -468,7 +468,7 @@ void LocalPlanServer::process_result(
 
       // http://docs.ros.org/en/api/trajectory_msgs/html/msg/MultiDOFJointTrajectoryPoint.html 
       // use this can directly for control
-      traj_act_msg.goal.N = traj_dis_msg.N;
+      traj_act_msg.goal.N = traj_dis_msg.N_ctrl;
       traj_act_msg.goal.pos_pts = traj_dis_msg.pos;
       traj_act_msg.goal.vel_pts = traj_dis_msg.vel;
       traj_act_msg.goal.acc_pts = traj_dis_msg.acc;

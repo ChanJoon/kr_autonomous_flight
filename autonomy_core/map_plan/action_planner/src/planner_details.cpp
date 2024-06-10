@@ -11,7 +11,8 @@ void OptPlanner::iLQR_Planner::setup() {
   bool publish_optimized_traj = false;
   bool publish_viz = false;  // N sample, time limit
   sampler_.reset(
-      new SplineTrajSampler(subscribe_to_traj,
+      new SplineTrajSampler(nh_,
+                            subscribe_to_traj,
                             publish_optimized_traj,
                             publish_viz,
                             50));  // good if multiple of 5, then add 1
@@ -21,7 +22,12 @@ kr_planning_msgs::TrajectoryDiscretized OptPlanner::iLQR_Planner::plan_discrete(
     const MPL::Waypoint3D& goal,
     const kr_planning_msgs::VoxelMap& map) {
   ROS_WARN("[iLQR] Discrete Planning!!!!!");
-  return sampler_->sample_and_refine_trajectory(search_path_msg_, hPolys, allo_ts);
+  double yaw = std::atan2(start.vel(1), start.vel(0));
+  Eigen::VectorXd startState(3);
+  startState << start.pos(0), start.pos(1), start.pos(2),
+                start.vel(0), start.vel(1), start.vel(2),
+                yaw;
+  return sampler_->sample_and_refine_trajectory(startState, search_path_msg_, hPolys, allo_ts);
 }
 
 MPL::Waypoint3D OptPlanner::iLQR_Planner::evaluate(double t) {
